@@ -5,4 +5,3 @@ from teleslet import main
 
 def test_speedtest():
     assert main.netspeed(Speedtest())
-

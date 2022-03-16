@@ -4,10 +4,12 @@ from importlib.metadata import version
 
 from speedtest import Speedtest
 
-logging.basicConfig(format="{asctime} {levelname:>8s} | {message}", style="{", level=logging.DEBUG)
+logging.basicConfig(
+    format="{asctime} {levelname:>8s} | {message}", style="{", level=logging.DEBUG
+)
 
 
-def netspeed(s: Speedtest, servers: list = None, threads=None) -> dict:
+def netspeed(s: Speedtest, servers: list = None, threads: int = None) -> dict:
     if not servers:
         servers = []
     servers = s.get_servers(servers)
@@ -24,10 +26,12 @@ def netspeed(s: Speedtest, servers: list = None, threads=None) -> dict:
     return s.results.dict()
 
 
-def main():
-    logging.info(f"Starting teleslet backend {version('teleslet')} at {datetime.now(timezone.utc)}.")
+def main() -> None:
+    logging.info(
+        f"Starting teleslet backend {version('teleslet')} at {datetime.now(timezone.utc)}."
+    )
     logging.info(f"First result: {netspeed(Speedtest())}.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
