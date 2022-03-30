@@ -7,8 +7,8 @@ def get_result(db: Session, result_id: int) -> model.Result:
     return db.query(model.Result).filter(model.Result.id == result_id).first()
 
 
-def get_results(db: Session) -> list[model.Result]:
-    return db.query(model.Result).all()
+def get_results(db: Session, skip: int = 0, limit: int = 100) -> list[model.Result]:
+    return db.query(model.Result).offset(skip).limit(limit).all()
 
 
 def create_client(db: Session, client: schemas.ClientCreate) -> model.Client:

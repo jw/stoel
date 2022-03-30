@@ -12,6 +12,7 @@ pydantic = "^1.9.0"
 SQLAlchemy = "^1.4.32"
 psycopg2 = "^2.9.3"
 fastapi = "^0.75.0"
+uvicorn = {extras = ["standard"], version = "^0.17.6"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.0"

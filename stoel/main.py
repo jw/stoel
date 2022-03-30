@@ -2,19 +2,40 @@ import logging
 from datetime import datetime, timezone
 from importlib.metadata import version
 
+from fastapi import Depends, FastAPI
 from speedtest import Speedtest
+from sqlalchemy.orm import Session  # noqa: TC002
 
+from stoel import crud, schemas
 from stoel.crud import create_client, create_result, create_server
 from stoel.database import SessionLocal, engine
 from stoel.model import Base
 from stoel.schemas import ClientCreate, ResultCreate, ServerCreate
 
-Base.metadata.create_all(bind=engine)
-
-
 logging.basicConfig(
     format="{asctime} {levelname:>8s} | {message}", style="{", level=logging.DEBUG
 )
+
+
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+
+def get_db() -> Session:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@app.get("/results/", response_model=list[schemas.Result])
+def read_results(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)  # noqa: B008
+):  # noqa: ANN201
+    results = crud.get_results(db, skip=skip, limit=limit)
+    return results
 
 
 def netspeed(s: Speedtest, servers: list = None, threads: int = None) -> dict:
